@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="th" data-bs-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="ตัวอย่างหน้าบทความ (Article / Album) ด้วย Bootstrap 5.3" />
+    <title>ตัวอย่างบทความ · Bootstrap v5.3</title>
+
+    <!-- Bootstrap 5.3 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <!-- Bootstrap Icons CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Google Fonts: Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- สคริปต์สลับโหมด Light / Dark / Auto สำหรับ Bootstrap 5.3 -->
+    <script>
+      (() => {
+        'use strict'
+        const getStoredTheme = () => localStorage.getItem('theme')
+        const setStoredTheme = theme => localStorage.setItem('theme', theme)
+
+        const getPreferredTheme = () => {
+          const storedTheme = getStoredTheme()
+          if (storedTheme) {
+            return storedTheme
+          }
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+
+        const setTheme = theme => {
+          if (theme === 'auto') {
+            document.documentElement.setAttribute('data-bs-theme', (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'))
+          } else {
+            document.documentElement.setAttribute('data-bs-theme', theme)
+          }
+        }
+
+        setTheme(getPreferredTheme())
+
+        const showActiveTheme = (theme, focus = false) => {
+          const themeSwitcher = document.querySelector('#bd-theme')
+          if (!themeSwitcher) return
+
+          const themeSwitcherText = document.querySelector('#bd-theme-text')
+          const activeThemeIcon = document.querySelector('.theme-icon-active use')
+          const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+          const svgOfActiveBtn = btnToActive ? btnToActive.querySelector('svg use').getAttribute('href') : null
+
+          document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+            element.classList.remove('active')
+            element.setAttribute('aria-pressed', 'false')
+          })
+
+          if (btnToActive) {
+            btnToActive.classList.add('active')
+            btnToActive.setAttribute('aria-pressed', 'true')
+            if (activeThemeIcon && svgOfActiveBtn) {
+              activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+            }
+          }
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+          const storedTheme = getStoredTheme()
+          if (storedTheme !== 'light' && storedTheme !== 'dark') {
+            setTheme(getPreferredTheme())
+          }
+        })
+
+        window.addEventListener('DOMContentLoaded', () => {
+          showActiveTheme(getPreferredTheme())
+
+          document.querySelectorAll('[data-bs-theme-value]').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+              const theme = toggle.getAttribute('data-bs-theme-value')
+              setStoredTheme(theme)
+              setTheme(theme)
+              showActiveTheme(theme, true)
+            })
+          })
+        })
+      })()
+    </script>
+
+    <style>
+      body {
+        font-family: 'Prompt', sans-serif;
+      }
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+      .bd-mode-toggle .bi {
+        width: 1em;
+        height: 1em;
+      }
+      .bd-mode-toggle .dropdown-menu .active .bi {
+        display: block !important;
+      }
+      .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SVG Icons Symbol Definitions -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+      <symbol id="check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+      </symbol>
+      <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"></path>
+      </symbol>
+      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"></path>
+        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"></path>
+      </symbol>
+      <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+      </symbol>
+    </svg>
+
+    <!-- ปุ่มสลับโหมดธีม Light/Dark (มุมขวาล่าง) -->
+    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+      <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center shadow" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+        <svg class="bi my-1 theme-icon-active" width="16" height="16"><use href="#circle-half"></use></svg>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+            <svg class="bi me-2 opacity-50" width="16" height="16"><use href="#sun-fill"></use></svg>
+            สว่าง (Light)
+            <svg class="bi ms-auto d-none" width="16" height="16"><use href="#check2"></use></svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+            <svg class="bi me-2 opacity-50" width="16" height="16"><use href="#moon-stars-fill"></use></svg>
+            มืด (Dark)
+            <svg class="bi ms-auto d-none" width="16" height="16"><use href="#check2"></use></svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+            <svg class="bi me-2 opacity-50" width="16" height="16"><use href="#circle-half"></use></svg>
+            อัตโนมัติ (Auto)
+            <svg class="bi ms-auto d-none" width="16" height="16"><use href="#check2"></use></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ส่วนหัวเว็บไซต์ (Navbar พร้อมเมนูย่อ/ขยาย) -->
+    <header data-bs-theme="dark">
+      <div class="collapse text-bg-dark" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-md-7 py-4">
+              <h4>เกี่ยวกับเรา</h4>
+              <p class="text-body-secondary">
+                หน้ารวมบทความและการแสดงผลด้วย Bootstrap 5.3 รองรับทั้ง Dark Mode และ Light Mode อย่างเต็มรูปแบบ พร้อมการออกแบบด้วยระบบ Grid และ Card
+              </p>
+            </div>
+            <div class="col-sm-4 offset-md-1 py-4">
+              <h4>ติดต่อ</h4>
+              <ul class="list-unstyled">
+                <li><a href="indx.html" class="text-white"><i class="bi bi-house-door me-1"></i> กลับหน้าแรก</a></li>
+                <li><a href="#" class="text-white"><i class="bi bi-facebook me-1"></i> ติดตามบน Facebook</a></li>
+                <li><a href="#" class="text-white"><i class="bi bi-envelope me-1"></i> ส่งอีเมลถึงเรา</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+          <a href="#" class="navbar-brand d-flex align-items-center">
+            <i class="bi bi-newspaper fs-4 me-2"></i>
+            <strong>คลังบทความ (Articles)</strong>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero Banner -->
+      <section class="py-5 text-center container">
+        <div class="row py-lg-4">
+          <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-bold">คลังบทความแนะนำ</h1>
+            <p class="lead text-body-secondary">
+              รวมบทความน่าสนใจ สาระความรู้ และไอเดียใหม่ๆ ที่ออกแบบด้วยคอมโพเนนต์ Card และ Grid System ของ Bootstrap 5.3 อย่างสวยงาม
+            </p>
+            <p class="d-flex justify-content-center gap-2">
+              <a href="indx.html" class="btn btn-primary my-2"><i class="bi bi-person me-1"></i> ดูข้อมูลผู้จัดทำ</a>
+              <a href="#articleList" class="btn btn-outline-secondary my-2"><i class="bi bi-arrow-down-circle me-1"></i> เริ่มอ่านบทความ</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- รายการการ์ดบทความ -->
+      <div class="album py-5 bg-body-tertiary" id="articleList">
+        <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+
+            <!-- Card 1 -->
+            <div class="col">
+              <div class="card shadow-sm h-100 rounded-3 overflow-hidden">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="บทความที่ 1" preserveAspectRatio="xMidYMid slice" focusable="false">
+                  <rect width="100%" height="100%" fill="#0d6efd"></rect>
+                  <text x="50%" y="50%" fill="#ffffff" dy=".3em" font-size="1.25rem" font-weight="bold">เริ่มต้นใช้งาน Bootstrap 5</text>
+                </svg>
+                <div class="card-body d-flex flex-column">
+                  <div class="mb-2">
+                    <span class="badge bg-primary-subtle text-primary">พื้นฐาน</span>
+                    <span class="badge bg-secondary-subtle text-secondary">Web Design</span>
+                  </div>
+                  <h5 class="card-title fw-bold">ทำความรู้จักกับ Bootstrap 5</h5>
+                  <p class="card-text text-body-secondary flex-grow-1">
+                    เรียนรู้พื้นฐานการจัดเลย์เอาต์ด้วย Grid System, Containers และ Utilities ที่ช่วยให้สร้างเว็บสวยได้รวดเร็ว
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-primary">อ่านต่อ</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">แชร์</button>
+                    </div>
+                    <small class="text-body-secondary"><i class="bi bi-clock me-1"></i>5 นาทีที่แล้ว</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col">
+              <div class="card shadow-sm h-100 rounded-3 overflow-hidden">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="บทความที่ 2" preserveAspectRatio="xMidYMid slice" focusable="false">
+                  <rect width="100%" height="100%" fill="#198754"></rect>
+                  <text x="50%" y="50%" fill="#ffffff" dy=".3em" font-size="1.25rem" font-weight="bold">การใช้ Color Mode & Dark Theme</text>
+                </svg>
+                <div class="card-body d-flex flex-column">
+                  <div class="mb-2">
+                    <span class="badge bg-success-subtle text-success">ฟีเจอร์เด析</span>
+                    <span class="badge bg-info-subtle text-info">CSS</span>
+                  </div>
+                  <h5 class="card-title fw-bold">วิธีเปิดใช้ Dark Mode อัตโนมัติ</h5>
+                  <p class="card-text text-body-secondary flex-grow-1">
+                    สอนการใช้งาน data-bs-theme ใน Bootstrap 5.3 เพื่อรองรับโหมดกลางคืนตามความชอบของผู้ใช้งาน
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-primary">อ่านต่อ</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">แชร์</button>
+                    </div>
+                    <small class="text-body-secondary"><i class="bi bi-clock me-1"></i>12 นาทีที่แล้ว</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col">
+              <div class="card shadow-sm h-100 rounded-3 overflow-hidden">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="บทความที่ 3" preserveAspectRatio="xMidYMid slice" focusable="false">
+                  <rect width="100%" height="100%" fill="#6f42c1"></rect>
+                  <text x="50%" y="50%" fill="#ffffff" dy=".3em" font-size="1.25rem" font-weight="bold">Bootstrap Components ยอดนิยม</text>
+                </svg>
+                <div class="card-body d-flex flex-column">
+                  <div class="mb-2">
+                    <span class="badge bg-purple-subtle text-purple" style="background-color: #e2d9f3; color: #59359a;">คอมโพเนนต์</span>
+                  </div>
+                  <h5 class="card-title fw-bold">10 คอมโพเนนต์ที่ต้องรู้</h5>
+                  <p class="card-text text-body-secondary flex-grow-1">
+                    เจาะลึก Navbar, Modal, Dropdown, Card และ Accordion ที่นำมาประกอบเป็นเว็บไซต์ระดับมืออาชีพ
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-primary">อ่านต่อ</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">แชร์</button>
+                    </div>
+                    <small class="text-body-secondary"><i class="bi bi-clock me-1"></i>1 ชั่วโมงที่แล้ว</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="col">
+              <div class="card shadow-sm h-100 rounded-3 overflow-hidden">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="บทความที่ 4" preserveAspectRatio="xMidYMid slice" focusable="false">
+                  <rect width="100%" height="100%" fill="#fd7e14"></rect>
+                  <text x="50%" y="50%" fill="#ffffff" dy=".3em" font-size="1.25rem" font-weight="bold">Responsive Web เบื้องต้น</text>
+                </svg>
+                <div class="card-body d-flex flex-column">
+                  <div class="mb-2">
+                    <span class="badge bg-warning-subtle text-warning-emphasis">Responsive</span>
+                  </div>
+                  <h5 class="card-title fw-bold">ออกแบบเว็บให้รองรับมือถือ</h5>
+                  <p class="card-text text-body-secondary flex-grow-1">
+                    เทคนิคการใช้ Breakpoints (sm, md, lg, xl, xxl) เพื่อให้หน้าเว็บจัดเรียงได้อย่างเหมาะสมบนทุกขนาดจอ
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-primary">อ่านต่อ</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">แชร์</button>
+                    </div>
+                    <small class="text-body-secondary"><i class="bi bi-clock me-1"></i>2 ชั่วโมงที่แล้ว</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="col">
+              <div class="card shadow-sm h-100 rounded-3 overflow-hidden">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="บทความที่ 5" preserveAspectRatio="xMidYMid slice" focusable="false">
+                  <rect width="100%" height="100%" fill="#20c997"></rect>
+                  <text x="50%" y="50%" fill="#ffffff" dy=".3em" font-size="1.25rem" font-weight="bold">สร้างฟอร์มสวยด้วย Bootstrap</text>
+                </svg>
+                <div class="card-body d-flex flex-column">
+                  <div class="mb-2">
+                    <span class="badge bg-teal-subtle text-teal" style="background-color: #d2f4ea; color: #0f5132;">Forms</span>
+                  </div>
+                  <h5 class="card-title fw-bold">ฟอร์มรับข้อมูลและ Validation</h5>
+                  <p class="card-text text-body-secondary flex-grow-1">
+                    เรียนรู้การตกแต่ง Input, Select, Checkbox พร้อมระบบแจ้งเตือนข้อผิดพลาด (Validation) ในตัว
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-primary">อ่านต่อ</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">แชร์</button>
+                    </div>
+                    <small class="text-body-secondary"><i class="bi bi-clock me-1">เมื่อวานนี้</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="col">
+              <div class="card shadow-sm h-100 rounded-3 overflow-hidden">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="บทความที่ 6" preserveAspectRatio="xMidYMid slice" focusable="false">
+                  <rect width="100%" height="100%" fill="#d63384"></rect>
+                  <text x="50%" y="50%" fill="#ffffff" dy=".3em" font-size="1.25rem" font-weight="bold">ตกแต่งเว็บด้วย Bootstrap Icons</text>
+                </svg>
+                <div class="card-body d-flex flex-column">
+                  <div class="mb-2">
+                    <span class="badge bg-danger-subtle text-danger">Icons</span>
+                  </div>
+                  <h5 class="card-title fw-bold">เพิ่มไอคอนเสริมความน่าสนใจ</h5>
+                  <p class="card-text text-body-secondary flex-grow-1">
+                    การนำไอคอนกว่า 2,000 รายการของ Bootstrap Icons มาใส่ในปุ่ม เมนู และการ์ดต่างๆ ได้อย่างง่ายดาย
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-primary">อ่านต่อ</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">แชร์</button>
+                    </div>
+                    <small class="text-body-secondary"><i class="bi bi-clock me-1">3 วันที่แล้ว</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-body-secondary py-5 border-top">
+      <div class="container">
+        <p class="float-end mb-1">
+          <a href="#" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-up"></i> กลับขึ้นด้านบน</a>
+        </p>
+        <p class="mb-1">
+          &copy; 2026 <strong>คลังบทความ</strong> จัดทำด้วย Bootstrap 5.3
+        </p>
+        <p class="mb-0 text-muted small">
+          ต้องการเรียนรู้เพิ่มเติม? <a href="indx.html">กลับไปดูหน้าแรก (ข้อมูลส่วนตัว)</a> หรือศึกษาคู่มือที่ <a href="https://getbootstrap.com" target="_blank" rel="noopener">Bootstrap Official</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
